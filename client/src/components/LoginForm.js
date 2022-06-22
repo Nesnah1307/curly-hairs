@@ -29,12 +29,12 @@ const LoginForm = () => {
 
     try {
       const { data } = await login({
-        variables: { ...userFormData }
+        variables: { ...userFormData },
       });
-
       Auth.login(data.login.token);
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
+      setShowAlert(true);
     }
 
     setUserFormData({
@@ -47,9 +47,12 @@ const LoginForm = () => {
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-          Something went wrong with your login credentials!
-        </Alert>
+        {error && (
+          <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
+            Something went wrong with your login credentials!
+          </Alert>
+        )}
+
         <Form.Group>
           <Form.Label htmlFor='email'>Email</Form.Label>
           <Form.Control
